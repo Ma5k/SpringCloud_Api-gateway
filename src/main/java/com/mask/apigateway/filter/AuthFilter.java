@@ -15,8 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import static  org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.PRE_DECORATION_FILTER_ORDER;
 
+/**
+ * 	权限拦截（区分买家和卖家）
+ * @author Mask
+ *
+ */
 @Component
-public class TokenFilter extends ZuulFilter {
+public class AuthFilter extends ZuulFilter {
 
 	@Override
 	public boolean shouldFilter() {
@@ -27,13 +32,11 @@ public class TokenFilter extends ZuulFilter {
 	public Object run() {
 		RequestContext requestContext = RequestContext.getCurrentContext();
 		HttpServletRequest request = requestContext.getRequest();
-		
-		//这里从url参数里获取，亦可以从cookie，header里获取
-		String token = request.getParameter("token");
-		if (StringUtils.isEmpty(token)) {
-//			requestContext.setSendZuulResponse(false);
-//			requestContext.setResponseStatusCode(HttpStatus.UNAUTHORIZED.value());
-		}
+		/**
+		 *	/order/create	只能买家访问
+		 *	/order/finish	只能卖家访问
+		 *	/product/list	都可访问
+		 */
 		return null;
 	}
 
